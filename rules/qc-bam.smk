@@ -35,7 +35,8 @@ rule samtools_stats:
     conda:
         "../envs/samtools.yaml"
     wrapper:
-        "0.27.1/bio/samtools/stats"
+        # "0.27.1/bio/samtools/stats"
+        f"file://{config['wrapper_repository']}/bio/samtools/stats/wrapper.py"
 
 rule samtools_stats_collect:
     input:
@@ -62,7 +63,8 @@ rule samtools_flagstat:
     conda:
         "../envs/samtools.yaml"
     wrapper:
-        "0.64.0/bio/samtools/flagstat"
+        # "0.64.0/bio/samtools/flagstat"
+        f"file://{config['wrapper_repository']}/bio/samtools/flagstat/wrapper.py"
 
 rule samtools_flagstat_collect:
     input:

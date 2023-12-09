@@ -54,8 +54,10 @@ rule map_reads:
     # It caused trouble when running large cluster jobs with high number of parallel jobs,
     # as the number of symlinks created for the shadow directory crashed our cluster max file
     # count limit...
-    wrapper:
-        "0.80.0/bio/bwa/mem"
+    script:
+        "../scripts/bwa-mem.py"
+    # wrapper:
+    #     "0.80.0/bio/bwa/mem"
 
     # samtools sort creates tmp files that are not cleaned up when the cluster job runs out
     # of time, but which cause samtools to immediately terminate if called again, meaning

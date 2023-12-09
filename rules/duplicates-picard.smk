@@ -42,4 +42,5 @@ rule mark_duplicates:
     conda:
         "../envs/picard.yaml"
     wrapper:
-        "0.51.3/bio/picard/markduplicates"
+        # "0.51.3/bio/picard/markduplicates"
+        f"file://{config['wrapper_repository']}/bio/picard/markduplicates/wrapper.py"

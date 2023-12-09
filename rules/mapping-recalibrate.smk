@@ -96,4 +96,5 @@ rule recalibrate_base_qualities:
     conda:
         "../envs/gatk.yaml"
     wrapper:
-        "0.51.3/bio/gatk/baserecalibrator"
+        # "0.51.3/bio/gatk/baserecalibrator"
+        f"file://{config['wrapper_repository']}/bio/gatk/baserecalibrator/wrapper.py"

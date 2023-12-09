@@ -21,7 +21,8 @@ rule bcftools_stats:
     group:
         "bcftools-stats"
     wrapper:
-        "v1.7.0/bio/bcftools/stats"
+        # "v1.7.0/bio/bcftools/stats"
+        f"file://{config['wrapper_repository']}/bio/bcftools/stats/wrapper.py"
 
 rule bcftools_stats_plot:
     input:

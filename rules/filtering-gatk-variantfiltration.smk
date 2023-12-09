@@ -35,4 +35,5 @@ rule gatk_hard_filter_calls:
     conda:
         "../envs/gatk.yaml"
     wrapper:
-        "0.85.0/bio/gatk/variantfiltration"
+        # "0.85.0/bio/gatk/variantfiltration"
+        f"file://{config['wrapper_repository']}/bio/gatk/variantfiltration/wrapper.py"

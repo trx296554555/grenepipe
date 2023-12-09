@@ -32,7 +32,8 @@ rule select_calls:
     conda:
         "../envs/gatk.yaml"
     wrapper:
-        "0.27.1/bio/gatk/selectvariants"
+        # "0.27.1/bio/gatk/selectvariants"
+        f"file://{config['wrapper_repository']}/bio/gatk/selectvariants/wrapper.py"
 
 # =================================================================================================
 #     Filtering
@@ -96,4 +97,5 @@ rule merge_calls:
     conda:
         "../envs/picard.yaml"
     wrapper:
-        "0.27.1/bio/picard/mergevcfs"
+        # "0.27.1/bio/picard/mergevcfs"
+        f"file://{config['wrapper_repository']}/bio/picard/mergevcfs/wrapper.py"

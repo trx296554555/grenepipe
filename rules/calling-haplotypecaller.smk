@@ -10,8 +10,7 @@ import platform
 def get_gatk_call_variants_params(wildcards, input):
     return (
         get_gatk_regions_param(regions=input.regions, default="--intervals '{}'".format(wildcards.contig))
-        + " --native-pair-hmm-threads " + str(config["params"]["gatk"]["HaplotypeCaller-threads"]) + " "
-        + config["params"]["gatk"]["HaplotypeCaller-extra"]
+        + " " + config["params"]["gatk"]["HaplotypeCaller-extra"]
     )
 
 rule call_variants:
@@ -80,7 +79,8 @@ rule call_variants:
         # Need to specify, yet again...
         "../envs/gatk.yaml"
     wrapper:
-        "0.51.3/bio/gatk/haplotypecaller"
+        # "0.51.3/bio/gatk/haplotypecaller"
+        f"file://{config['wrapper_repository']}/bio/gatk/haplotypecaller/wrapper.py"
 
 # Deactivated the below, as this was causing trouble. Got the warning
 #     Warning: the following output files of rule vcf_index_gatk were not present when the DAG was created:
@@ -156,7 +156,8 @@ rule combine_calls:
     conda:
         "../envs/gatk.yaml"
     wrapper:
-        "0.51.3/bio/gatk/combinegvcfs"
+        # "0.51.3/bio/gatk/combinegvcfs"
+        f"file://{config['wrapper_repository']}/bio/gatk/combinegvcfs/wrapper.py"
 
 rule genotype_variants:
     input:
@@ -193,7 +194,8 @@ rule genotype_variants:
     conda:
         "../envs/gatk.yaml"
     wrapper:
-        "0.51.3/bio/gatk/genotypegvcfs"
+        # "0.51.3/bio/gatk/genotypegvcfs"
+        f"file://{config['wrapper_repository']}/bio/gatk/genotypegvcfs/wrapper.py"
 
 # =================================================================================================
 #     Merging Variants
@@ -231,4 +233,5 @@ rule merge_variants:
     conda:
         "../envs/picard.yaml"
     wrapper:
-        "0.51.3/bio/picard/mergevcfs"
+        # "0.51.3/bio/picard/mergevcfs"
+        f"file://{config['wrapper_repository']}/bio/picard/mergevcfs/wrapper.py"

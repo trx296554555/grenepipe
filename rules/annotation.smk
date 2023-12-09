@@ -186,8 +186,10 @@ rule vep:
             if not config["settings"]["filter-variants"] == "none"
             else "genotyped/all.vcf.gz"
         ),
-        cache=get_vep_cache_dir(),
-        plugins=get_vep_plugins_dir(),
+        # cache=get_vep_cache_dir(),
+        # plugins=get_vep_plugins_dir(),
+        cache=config["params"]["vep"]["cache-dir"],
+        plugins=config["params"]["vep"]["plugins-dir"],
     output:
         calls=report(
             "annotated/vep.vcf.gz",
@@ -224,4 +226,5 @@ rule vep:
     # It wants there to be one file in the database, when the vep cache wrapper also can produce
     # multiple files/directories in the cache du to also downloading the fasta reference files.
     wrapper:
-        "0.74.0/bio/vep/annotate"
+        # "0.74.0/bio/vep/annotate"
+        f"file://{config['wrapper_repository']}/bio/vep/annotate/wrapper.py"

@@ -1,4 +1,8 @@
 # =================================================================================================
+#     Local Wrapper Repository
+# =================================================================================================
+wrapper_repository: "/data-2/snakemake-wrappers-3.0.4"
+# =================================================================================================
 #     Input Data
 # =================================================================================================
 
@@ -10,7 +14,7 @@ data:
   # The path to the table file itself, as well as the paths to the fastq files within the table need
   # to be absolute! No relative paths (e.g., `../data`), and no paths using shortcuts such as `~`.
   # See the wiki (https://github.com/lczech/grenepipe/wiki) for the expected format.
-  samples-table: "/path/to/data/samples.tsv"
+  samples-table: "/home/user003/kd/workflow/config/samples.tsv"
 
   # Needed. Path to the reference genome in fasta format.
   # Path needs to be absolute! No relative path (e.g., `../ref`), and no paths using shortcuts
@@ -18,13 +22,13 @@ data:
   # We expect that each sequence in the file represents a chromsome, contig, or scaffold.
   # For genomes that are not fully assembled but consist of many small scaffolds,
   # see the `contig-group-size` option below to help increase computational speed.
-  reference-genome: "/path/to/data/genome.fa"
+  reference-genome: "/home/user003/kd/resources/genome.fasta"
 
   # Optional. Path to any database of known variants (in vcf or vcf.gz format),
   # ideally as it is provided by the GATK bundle.
   # Use an empty list or string instead, if there is no reference of known variants or if you
   # want to call variant without this guided approach. Path needs to be absolute, as above.
-  known-variants: ""
+  known-variants: "/home/user003/kd/resources/variation.noiupac.vcf.gz"
 
   # Optional. Number of distinct samples that are expect to be in the above samples table.
   # This serves as a consistency check, and is recommended to use, but not necessary.
@@ -37,7 +41,7 @@ data:
   # which should then also correspond to the expected number of columns in the final vcf.
   # For instance, in a samples table with no re-sequenced samples, where all entries in the `units`
   # column are 1, the number of rows in the table corresponds to the number of samples.
-  samples-count: 0
+  samples-count: 539
 
 # =================================================================================================
 #     Pipeline Settings
@@ -120,7 +124,7 @@ settings:
   # As far as we are aware, valid platform values (in either the table or the setting) are
   # "CAPILLARY", "LS454", "ILLUMINA", "SOLID", "HELICOS", "IONTORRENT", "ONT", "PACBIO".
   # Others might work as well, depending on GATK BaseRecalibrator.
-  recalibrate-base-qualities: false
+  recalibrate-base-qualities: true
 
   # Select the tool used for SNP calling.
   # Valid values: "haplotypecaller" (for GATK HaplotypeCaller), "bcftools", "freebayes".
@@ -163,7 +167,7 @@ settings:
   # to create 10 groups of contigs (bins) for the computation, each one representing ~10,000,000 bp
   # of contigs. Then, each group contains about 5,000 / 10 = 10,000,000 / 20,000 = 500 contigs
   # (on average).
-  contig-group-size: 0
+  contig-group-size: 10000000
 
   # EXPERIMENTAL.
   # Path to a `bed` file with, e.g., captured regions, in order to restrict the variant calling
@@ -233,7 +237,7 @@ settings:
   # and all other desired settings and plugins for VEP.
   # Set to false when using the workflow to only obtain quality control statistics,
   # as otherwise the whole pipeline will be run regardless.
-  vep: false
+  vep: true
 
   # If activated, bcftools stats is run on the filtered VCF file, and its output added to the
   # MultiQC report. Note that this requires the variant calling step - if you are working with
@@ -682,7 +686,7 @@ params:
 
     # Number of threads to use for the HaplotypeCaller. We recommend to keep this at 2,
     # as GATK does not seem to do a great job of parallelizing anyway.
-    HaplotypeCaller-threads: 2
+    HaplotypeCaller-threads: 1
 
   # ----------------------------------------------------------------------
   #     GATK VariantFiltration
@@ -729,37 +733,40 @@ params:
     # for reference.
     resources:
       # Example resource using a 1001G Arabidopsis thaliana VCF.
-      1001G:
+      hapmap:
         - known: false
         - training: true
         - truth: true
+        - prior: 15.0
+      mills:
+        - known: false
+        - training: true
+        - truth: true
+        - prior: 12.0
+      omni:
+        - known: false
+        - training: true
+        - truth: false
+        - prior: 12.0
+      1000G:
+        - known: false
+        - training: true
+        - truth: false
         - prior: 10.0
+      dbsnp:
+        - known: true
+        - training: false
+        - truth: false
+        - prior: 2.0
 
-      # Other examples, from the GATK documentation, for the human genome.
-      # - hapmap:
-      #   - known: false
-      #   - training: true
-      #   - truth: true
-      #   - prior: 15.0
-      # - omni:
-      #   - known: false
-      #   - training: true
-      #   - truth: false
-      #   - prior: 12.0
-      # - 1000G:
-      #   - known: false
-      #   - training: true
-      #   - truth: false
-      #   - prior: 10.0
-      # - dbsnp:
-      #   - known: true
-      #   - training: false
-      #   - truth: false
-      #   - prior: 2.0
     resource-files:
       # Example resource using a 1001G Arabidopsis thaliana VCF subset.
       # We just re-use the known variants file here, for illustration and test purposes only.
-      1001G: "#BASEPATH#/test/reference/known-variants.vcf.gz"
+      hapmap: "/home/user003/kd/resources/VQSR/hapmap_3.3.snp.hg38.vcf.gz"
+      mills: "/home/user003/kd/resources/VQSR/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz"
+      omni: "/home/user003/kd/resources/VQSR/1000G_omni2.5.snp.hg38.vcf.gz"
+      1000G: "/home/user003/kd/resources/VQSR/1000G_phase1.snps.high_confidence.hg38.vcf.gz"
+      dbsnp: "/home/user003/kd/resources/VQSR/dbsnp_146.hg38.vcf.gz"
 
       # Other examples, from the GATK documentation, for the human genome.
       # - hapmap: "hapmap_3.3.hg38.sites.vcf.gz"
@@ -770,6 +777,8 @@ params:
     # Provide the annotions of the VCF INFO field to be used for VQSR. These should match the fields
     # that are actually available in your resource files.
     annotation:
+      - "MQ"
+      - "QD"
       - "DP"
       # - "QD"
       # - "MQ"
@@ -859,14 +868,14 @@ params:
     # ecosystem, e.g., Ensembl release 104 / Ensembl Genomes 51, which is confusing.
 
     # Ensembl species name
-    species: "arabidopsis_thaliana"
+    species: "homo_sapiens"
 
     # Genome build
-    build: "TAIR10"
+    build: "GRCh38"
 
     # Ensembl release version.
     # Used for the species cache version and for the plugins download.
-    release: 104
+    release: 110
 
     # For non-metazoans, we need different download URLs for obtaining the Ensembl data,
     # but it does not seem to be documented well where to find those URLs.
@@ -889,8 +898,8 @@ params:
     # In many cases, this helps to avoid re-downloaded the data for every run of grenepipe.
     # Hence we recommend to use absolute paths!
     # If left blank, we use the same directory where the reference genome is located.
-    cache-dir: ""
-    plugins-dir: ""
+    cache-dir: "/home/user003/kd/resources/vep/cache"
+    plugins-dir: "/home/user003/kd/resources/vep/plugins"
 
     # Extra command line arguments (e.g. --sift, see docs) for the VEP annotation.
     extra: ""

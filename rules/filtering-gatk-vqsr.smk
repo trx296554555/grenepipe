@@ -103,7 +103,7 @@ rule gatk_variant_recalibrator:
     # Group deactivated, so that it can run in parallel for SNP and INDEL
     # group:
     #     "filtering"
-    resources:
+    # resources:
         # optional specification of memory usage of the JVM that snakemake will respect with global
         # resource restrictions
         # (https://snakemake.readthedocs.io/en/latest/snakefiles/rules.html#resources)
@@ -115,7 +115,8 @@ rule gatk_variant_recalibrator:
         # which we want in order to also plot the trances file for SNPs... because why not.
         "../envs/gatk.yaml"
     wrapper:
-        "0.85.0/bio/gatk/variantrecalibrator"
+        # "0.85.0/bio/gatk/variantrecalibrator"
+        f"file://{config['wrapper_repository']}/bio/gatk/variantrecalibrator/wrapper.py"
 
 rule gatk_apply_vqsr:
     input:
@@ -140,7 +141,7 @@ rule gatk_apply_vqsr:
         mode="{vartype}",
         extra=get_apply_vqsr_extra,
         java_opts=config["params"]["gatk-vqsr"]["java-applyvqsr"]
-    resources:
+    # resources:
         # mem_mb=50
     conda:
         # We overwrite the original yaml, as this wrapper here (version 0.85.0) and the one above
@@ -148,4 +149,5 @@ rule gatk_apply_vqsr:
         # Ah if only things were consistent... so let's make them use the same version here.
         "../envs/gatk.yaml"
     wrapper:
-        "0.85.0/bio/gatk/applyvqsr"
+        # "0.85.0/bio/gatk/applyvqsr"
+        f"file://{config['wrapper_repository']}/bio/gatk/applyvqsr/wrapper.py"
