@@ -102,8 +102,12 @@ rule merge_sample_unit_bams:
         config["params"]["samtools"]["merge-threads"]
     log:
         "logs/samtools/merge/merge-{sample}.log"
+    conda:
+        # Need our own env again, because of conflicting numpy and pandas version...
+        "../envs/samtools.yaml"
     wrapper:
-        "0.74.0/bio/samtools/merge"
+        # "0.74.0/bio/samtools/merge"
+        f"file://{config['wrapper_repository']}/bio/samtools/merge/wrapper.py"
 
 # =================================================================================================
 #     Filtering and Clipping Mapped Reads
@@ -125,7 +129,8 @@ rule filter_mapped_reads:
         # Need our own env again, because of conflicting numpy and pandas version...
         "../envs/samtools.yaml"
     wrapper:
-        "0.85.0/bio/samtools/view"
+        # "0.85.0/bio/samtools/view"
+        f"file://{config['wrapper_repository']}/bio/samtools/view/wrapper.py"
 
 rule clip_read_overlaps:
     input:
@@ -240,8 +245,12 @@ rule bam_index:
         "logs/samtools/index/{prefix}.log"
     group:
         "mapping_extra"
+    conda:
+        # Need our own env again, because of conflicting numpy and pandas version...
+        "../envs/samtools.yaml"
     wrapper:
-        "0.51.3/bio/samtools/index"
+        # "0.51.3/bio/samtools/index"
+        f"file://{config['wrapper_repository']}/bio/samtools/index/wrapper.py"
 
 # =================================================================================================
 #     Final Mapping Result

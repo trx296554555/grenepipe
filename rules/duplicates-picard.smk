@@ -41,6 +41,8 @@ rule mark_duplicates:
         "mapping_extra"
     conda:
         "../envs/picard.yaml"
-    wrapper:
+    script:
+        "../scripts/picard-markduplicates.py"
+    # wrapper:
         # "0.51.3/bio/picard/markduplicates"
-        f"file://{config['wrapper_repository']}/bio/picard/markduplicates/wrapper.py"
+        # f"file://{config['wrapper_repository']}/bio/picard/markduplicates/wrapper.py"

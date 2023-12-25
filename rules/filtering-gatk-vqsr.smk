@@ -114,9 +114,10 @@ rule gatk_variant_recalibrator:
         # We overwrite the original yaml, as it does not contain the R specifications,
         # which we want in order to also plot the trances file for SNPs... because why not.
         "../envs/gatk.yaml"
-    wrapper:
-        # "0.85.0/bio/gatk/variantrecalibrator"
-        f"file://{config['wrapper_repository']}/bio/gatk/variantrecalibrator/wrapper.py"
+    script:
+        "../scripts/gatk-variantrecalibrator.py"
+    # wrapper:
+    #     "0.85.0/bio/gatk/variantrecalibrator"
 
 rule gatk_apply_vqsr:
     input:
