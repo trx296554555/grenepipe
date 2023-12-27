@@ -16,13 +16,15 @@ rule bcftools_stats:
         "logs/bcftools-stats/bcftools.stats.log"
     params:
         config["params"]["bcftools"]["stats"]
+    threads: 12
     conda:
         "../envs/bcftools.yaml"
     group:
         "bcftools-stats"
-    wrapper:
-        # "v1.7.0/bio/bcftools/stats"
-        f"file://{config['wrapper_repository']}/bio/bcftools/stats/wrapper.py"
+    script:
+        "../scripts/bcftools-stats.py"
+    # wrapper:
+    #     "v1.7.0/bio/bcftools/stats"
 
 rule bcftools_stats_plot:
     input:

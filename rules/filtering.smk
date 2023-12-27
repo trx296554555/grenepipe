@@ -72,7 +72,7 @@ rule merge_calls:
         # We use different naming for the VQSR intermediate files,
         # to make it a bit more understandable to the user which file is which...
         # not sure if that helps, or is more confusing in the end :-O
-        vcf=expand(
+        vcfs=expand(
             "filtered/all.{vartype}.{filtertype}.vcf.gz",
             vartype=["SNP", "INDEL"],
             filtertype="recalibrated"

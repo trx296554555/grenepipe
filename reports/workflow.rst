@@ -1,5 +1,5 @@
 Variants where called *roughly* following the `GATK best practices workflow`_:
-Reads were mapped onto the {{ snakemake.config["data"]["reference"]["name"] }} reference genome with `BWA mem`_.
+Reads were mapped onto the {{ snakemake.config["data"]["reference-genome"]["name"] }} reference genome with `BWA mem`_.
 {% if snakemake.config["settings"]["remove-duplicates"] %}
 Both optical and PCR duplicates were removed with Picard_.
 {% endif %}
@@ -18,7 +18,7 @@ Next, bcftools_ was used to call variants per sample.
 Genotyped variants were filtered with the GATK_ VariantRecalibrator approach.
 {% else %}
 Genotyped variants were filtered using hard thresholds.
-For SNVs, the criterion ``{{ snakemake.config["params"]["variantfiltration-hard"]["snvs"] }}`` was used, for Indels the criterion ``{{ snakemake.config["params"]["variantfiltration-hard"]["indels"] }}`` was used.
+For SNVs, the criterion ``{{ snakemake.config["params"]["gatk-variantfiltration"]["SNP"] }}`` was used, for Indels the criterion ``{{ snakemake.config["params"]["gatk-variantfiltration"]["INDEL"] }}`` was used.
 {% endif %}
 Finally, SnpEff_ was used to predict and report variant effects.
 In addition, quality control was performed with FastQC_, Samtools_, and Picard_ and aggregated into an interactive report via MultiQC_.

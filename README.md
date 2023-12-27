@@ -85,6 +85,12 @@ Pipeline Overview
   - MultiQC report (includes summaries of most other tools, and of the final `vcf`)
   - Snakemake report (optional)
 
+```
+snakemake --report report.html
+snakemake --rulegraph | dot -Tpdf > mygatk_rules.pdf 
+# 修改了snakemake report 的report.html.jinja2文件，里面有个连接被墙了
+```
+
 Intermediate output files such as `bam` files are also kept by default,
 and `mpileup` files can optionally be created if needed.
 In addition to the above tools, there are some tools used as glue between the steps.

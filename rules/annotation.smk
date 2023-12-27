@@ -191,11 +191,12 @@ rule vep:
         cache=config["params"]["vep"]["cache-dir"],
         plugins=config["params"]["vep"]["plugins-dir"],
     output:
-        calls=report(
-            "annotated/vep.vcf.gz",
-            caption="../report/vcf.rst",
-            category="Calls",
-        ),
+        calls="annotated/vep.vcf.gz",
+        # calls=report(
+        #     "annotated/vep.vcf.gz",
+        #     caption="../reports/vcf.rst",
+        #     category="Calls",
+        # ),
         stats=report(
             # The html file has to have a specific file name, so that MultiQC can find it,
             # see https://multiqc.info/docs/#vep
@@ -203,7 +204,7 @@ rule vep:
             # MultiQC recently, see https://github.com/ewels/MultiQC/issues/1438
             # Will need to update to MultiQC v1.11 at some point.
             "annotated/vep_summary.html",
-            caption="../report/stats.rst",
+            caption="../reports/stats.rst",
             category="Calls",
         ),
     params:
